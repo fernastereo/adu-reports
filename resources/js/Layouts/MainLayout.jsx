@@ -11,7 +11,7 @@ export default function Authenticated({ header, children }) {
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
@@ -21,8 +21,11 @@ export default function Authenticated({ header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('main-report')} active={route().current('main-report')}>
                                     Appointment Report
+                                </NavLink>
+                                <NavLink href={route('sync-data')} active={route().current('sync-data')}>
+                                    Sync Data
                                 </NavLink>
                             </div>
                         </div>
