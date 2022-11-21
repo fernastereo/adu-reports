@@ -27,7 +27,12 @@ export default function SyncData(props) {
     const onSubmit = (e) => {
 		e.preventDefault();
         setProcessingCallMeeting(true);
-        setProcessingCallMeeting(true);
+        
+        setResultSyncCallMeeting('');
+        setResultSyncOnSite('');
+        setResultSyncSalesPerson('');
+        setResultSyncOpportunities('');
+        
         fetch('api/sync/calendar/callMeetingCalendarId')
 		.then(response => response.json())
 		.then(response => {
@@ -54,10 +59,14 @@ export default function SyncData(props) {
 		.then(response => {
             setResultSyncOpportunities(response.data);
             setProcessingOpportunities(false);
-            // setProcessingContacts(true);
-            // return fetch('api//sync/opportunity')
+            setProcessingContacts(true);
+            return fetch('api/sync/contact')
         })
-        ;
+        .then(response => response.json())
+		.then(response => {
+            setResultSyncContacts(response.data);
+            setProcessingContacts(false);
+        });
     }
 
     return (

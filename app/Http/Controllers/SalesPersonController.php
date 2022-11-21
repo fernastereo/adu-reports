@@ -62,7 +62,7 @@ class SalesPersonController extends Controller
             if ($err) {
                 return "cURL Error #:" . $err;
             } else {
-                return json_decode($response, true);;
+                return json_decode($response, true);
             }
         } catch (\Throwable $th) {
             return $th->getMessage();

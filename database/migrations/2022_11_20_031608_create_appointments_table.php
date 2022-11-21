@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("appointmentid")->nullable();
             $table->string("selectedTimezone")->nullable();
-            $table->string("notes")->nullable();
+            $table->longText("notes")->nullable();
             $table->string("contactId")->nullable();
             $table->string("locationId")->nullable();
             $table->boolean("isFree")->nullable();

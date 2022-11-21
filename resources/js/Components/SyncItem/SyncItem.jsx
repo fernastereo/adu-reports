@@ -10,7 +10,7 @@ export default function SyncItem(props) {
         <div className="mx-2 my-6 flex items-center">
             {props.processing && <Spinner/>}
         </div>
-        <div className="w-1/6 mx-4 my-6 flex items-center">
+        <div className="w-1/6 mx-4 my-6 flex items-center font-semibold text-green-500">
             {props.resultSync}
         </div>
     </div>

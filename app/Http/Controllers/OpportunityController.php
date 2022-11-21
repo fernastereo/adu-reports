@@ -12,7 +12,7 @@ class OpportunityController extends Controller
 {
     function sync()
     {
-        $data = $this->callAPI("https://rest.gohighlevel.com/v1/pipelines/nIcczYbNQA6WLkFkbHrb/opportunities?stageId=65bc9a79-6f5c-487d-b91d-bf8729a0d8ee");
+        $data = $this->callAPI("https://rest.gohighlevel.com/v1/pipelines/nIcczYbNQA6WLkFkbHrb/opportunities?limit=100&stageId=65bc9a79-6f5c-487d-b91d-bf8729a0d8ee");
 
         if ($data) {
             Opportunity::truncate();
@@ -69,7 +69,7 @@ class OpportunityController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
                 CURLOPT_HTTPHEADER => [
-                    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IjJUdGtJbWRlaWpLRWdaRGJIM1A0IiwiY29tcGFueV9pZCI6Ilozd3dXcWFRQlBUMFRHRDFBN0lWIiwidmVyc2lvbiI6MSwiaWF0IjoxNjM1MTgyNzAxOTgzLCJzdWIiOiJ5a3QzdkhldlQ1V3NwUHpPSURPNCJ9.YeXHFb52xtBaSIbtXf6yFGzAPsXMwteB4L5Y-6Vq9AY"
+                    "Authorization: Bearer " . config('constants.token_api')
                 ],
             ]);
 

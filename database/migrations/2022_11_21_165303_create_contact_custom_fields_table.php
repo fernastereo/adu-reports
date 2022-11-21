@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('appointment_attachments', function (Blueprint $table) {
+        Schema::create('contact_custom_fields', function (Blueprint $table) {
             $table->id();
+            $table->string("customFieldId")->nullable();
             $table->longText("value")->nullable();
-            $table->unsignedBigInteger("appointment_id");
+            $table->unsignedBigInteger("contact_id");
             $table->timestamps();
-            $table->foreign("appointment_id")->references("id")->on("appointments")->onDelete("cascade");
+            $table->foreign("contact_id")->references("id")->on("contacts")->onDelete("cascade");
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('appointment_attachments');
+        Schema::dropIfExists('contact_custom_fields');
     }
 };
