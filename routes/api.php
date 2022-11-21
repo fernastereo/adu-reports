@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\SalesPersonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/sync/calendar/{calendar}', [AppointmentController::class, 'sync']);
+Route::get('/sync/salesperson', [SalesPersonController::class, 'sync']);
+Route::get('/sync/opportunity', [OpportunityController::class, 'sync']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

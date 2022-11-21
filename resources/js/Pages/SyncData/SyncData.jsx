@@ -21,12 +21,12 @@ export default function SyncData(props) {
 
 	const closeAlert = () => {
 		setError('');
-		setProcessing(false);
+
 	}
     
     const onSubmit = (e) => {
 		e.preventDefault();
-        console.log('here');
+        setProcessingCallMeeting(true);
         setProcessingCallMeeting(true);
         fetch('api/sync/calendar/callMeetingCalendarId')
 		.then(response => response.json())
@@ -40,7 +40,22 @@ export default function SyncData(props) {
 		.then(response => {
             setResultSyncOnSite(response.data);
             setProcessingOnSite(false);
-            // return fetch('api/sync/calendar/onSiteEvaluationCalendarId')
+            setProcessingSalesPerson(true);
+            return fetch('api/sync/salesperson')
+        })
+        .then(response => response.json())
+		.then(response => {
+            setResultSyncSalesPerson(response.data);
+            setProcessingSalesPerson(false);
+            setProcessingOpportunities(true);
+            return fetch('api/sync/opportunity')
+        })
+        .then(response => response.json())
+		.then(response => {
+            setResultSyncOpportunities(response.data);
+            setProcessingOpportunities(false);
+            // setProcessingContacts(true);
+            // return fetch('api//sync/opportunity')
         })
         ;
     }
