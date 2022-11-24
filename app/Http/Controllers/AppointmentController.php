@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\Contact;
 use App\Models\ContactTag;
 use App\Models\Appointment;
+use App\Models\Opportunity;
 use App\Models\SalesPerson;
 use Illuminate\Http\Request;
 use App\Models\AppointmentTag;
@@ -13,144 +15,161 @@ use App\Models\ContactCustomField;
 use Illuminate\Support\Facades\DB;
 use App\Models\AppointmentAttachment;
 use App\Models\AppointmentCustomField;
-use App\Models\Opportunity;
 
 class AppointmentController extends Controller
 {
     public function appointmentReport($startDate, $endDate)
     {
-        ini_set('max_execution_time', 360);
-        $result = [];
+        try {
+            //code...
+            ini_set('max_execution_time', 360);
+            $result = [];
 
-        $from = date($startDate);
-        $to = date($endDate);
-        $callMeetingCalendar = Appointment::where('calendarId', config('constants.callMeetingCalendarId'))
-            ->whereBetween('appointmentstartTime', [$from, $to])
-            ->get()
-            ->toArray();
+            $from = date($startDate);
+            $to = date($endDate);
+            $callMeetingCalendar = Appointment::where('calendarId', config('constants.callMeetingCalendarId'))
+                ->whereBetween('appointmentstartTime', [$from, $to])
+                ->get()
+                ->toArray();
 
-        $onSiteCalendar = Appointment::where('calendarId', config('constants.onSiteEvaluationCalendarId'))
-            ->whereBetween('appointmentstartTime', [$from, $to])
-            ->get()
-            ->toArray();
+            $onSiteCalendar = Appointment::where('calendarId', config('constants.onSiteEvaluationCalendarId'))
+                ->whereBetween('appointmentstartTime', [$from, $to])
+                ->get()
+                ->toArray();
 
-        $salesPerson = SalesPerson::all()->toArray();
-        $opportunities = Opportunity::all()->toArray();
+            $salesPerson = SalesPerson::all()->toArray();
+            $opportunities = Opportunity::all()->toArray();
 
-        foreach ($callMeetingCalendar as $elem) {
-            $contactId = $elem['contactId'];
-            $onSiteEvaluationAppointmentStatus = $this->findInArray($onSiteCalendar, 'contactId', $contactId);
+            foreach ($callMeetingCalendar as $elem) {
+                $contactId = $elem['contactId'];
+                $onSiteEvaluationAppointmentStatus = $this->findInArray($onSiteCalendar, 'contactId', $contactId);
 
-            $assignedUserId = $elem["assignedUserId"];
-            if (isset($assignedUserId)) {
-                $salesPersonName = $this->findInArray($salesPerson, 'assignedUserId',  $assignedUserId);
-            }
-
-            //look for contact data
-            $contactData = Contact::where('contactid', $contactId)->first();
-
-            if ($contactData === null) {
-                //if the contact doesn't exists then look for it on the API and create it in local DB
-                $contactData = $this->syncContact($contactId);
-            }
-
-            $contractorNotes = "";
-            $customFields = [];
-            $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.contractorNotesId'))->get()->toArray();
-            if (count($customFields) > 0) {
-                $filtered_arr = array_filter(
-                    $customFields,
-                    function ($obj) {
-                        return $obj['customFieldId'] === config('constants.contractorNotesId');
-                    }
-                );
-
-                if (count($filtered_arr) > 0) {
-                    $key = array_keys($filtered_arr)[0];
-                    $contractorNotes = $filtered_arr[$key]["value"];
+                $assignedUserId = $elem["assignedUserId"];
+                if (isset($assignedUserId)) {
+                    $salesPersonName = $this->findInArray($salesPerson, 'assignedUserId',  $assignedUserId);
                 }
-            }
 
-            $meetingFeedback = "";
-            $customFields = [];
-            $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.meetingFeedbackId'))->get()->toArray();
-            if (count($customFields) > 0) {
-                $filtered_arr = array_filter(
-                    $customFields,
-                    function ($obj) {
-                        return $obj['customFieldId'] === config('constants.meetingFeedbackId');
-                    }
-                );
+                //look for contact data
+                $contactData = Contact::where('contactid', $contactId)->first();
 
-                if (count($filtered_arr) > 0) {
-                    $key = array_keys($filtered_arr)[0];
-                    $meetingFeedback = $filtered_arr[$key]["value"];
+                if ($contactData === null) {
+                    //if the contact doesn't exists then look for it on the API and create it in local DB
+                    $contactData = $this->syncContact($contactId);
                 }
-            }
 
-            $disposition = "";
-            $customFields = [];
-            $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.dispositionId'))->get()->toArray();
-            if (count($customFields) > 0) {
-                $filtered_arr = array_filter(
-                    $customFields,
-                    function ($obj) {
-                        return $obj['customFieldId'] === config('constants.dispositionId');
-                    }
-                );
+                $contractorNotes = "";
+                $customFields = [];
+                $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.contractorNotesId'))->get()->toArray();
+                if (count($customFields) > 0) {
+                    $filtered_arr = array_filter(
+                        $customFields,
+                        function ($obj) {
+                            return $obj['customFieldId'] === config('constants.contractorNotesId');
+                        }
+                    );
 
-                if (count($filtered_arr) > 0) {
-                    $key = array_keys($filtered_arr)[0];
-                    $meetingFeedback = $filtered_arr[$key]["value"];
-                }
-            }
-
-            $opportunityWon = "";
-            $contractSent = "";
-            if (isset($contactId)) {
-                $opportunity = $this->findInArray($opportunities, 'contactid',  $contactId);
-                if (count($opportunity) > 0) {
-                    if ($opportunity['status'] === "won") {
-                        $opportunityWon = "X";
-                        $contractSent = "";
-                    } else {
-                        $opportunityWon = "";
-                        $contractSent = "X";
+                    if (count($filtered_arr) > 0) {
+                        $key = array_keys($filtered_arr)[0];
+                        $contractorNotes = $filtered_arr[$key]["value"];
                     }
                 }
-            }
 
-            $item = [
-                'appointmentid' => $elem['appointmentid'],
-                'date' => $elem['appointmentstartTime'],
-                'contactId' => $elem['contactId'],
-                'customerName' => $elem['contactfirstName'] . ' ' . $elem['contactlastName'],
-                'assignedUserId' => $elem['assignedUserId'],
-                'salesPerson' => count($salesPersonName) > 0 ? $salesPersonName['name'] : '',
-                'callMeeting' => $elem['appointmentStatus'],
-                'onSite' => count($onSiteEvaluationAppointmentStatus) > 0 ? $onSiteEvaluationAppointmentStatus['appointmentStatus'] : '',
-                'contractSent' => $contractSent,
-                'opportunityWon' => $opportunityWon,
-                'appointmentSetterNotes' => $contractorNotes,
-                'disposition' => $disposition,
-                'salesPersonFeedback' => $meetingFeedback,
-            ];
-            array_push($result, $item);
-        }
-        return response()->json(
-            [
-                'success' => true,
-                'params' => [
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
+                $meetingFeedback = "";
+                $customFields = [];
+                $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.meetingFeedbackId'))->get()->toArray();
+                if (count($customFields) > 0) {
+                    $filtered_arr = array_filter(
+                        $customFields,
+                        function ($obj) {
+                            return $obj['customFieldId'] === config('constants.meetingFeedbackId');
+                        }
+                    );
+
+                    if (count($filtered_arr) > 0) {
+                        $key = array_keys($filtered_arr)[0];
+                        $meetingFeedback = $filtered_arr[$key]["value"];
+                    }
+                }
+
+                $disposition = "";
+                $customFields = [];
+                $customFields = ContactCustomField::where('contact_id', $contactData->id)->where('customFieldId', config('constants.dispositionId'))->get()->toArray();
+                if (count($customFields) > 0) {
+                    $filtered_arr = array_filter(
+                        $customFields,
+                        function ($obj) {
+                            return $obj['customFieldId'] === config('constants.dispositionId');
+                        }
+                    );
+
+                    if (count($filtered_arr) > 0) {
+                        $key = array_keys($filtered_arr)[0];
+                        $meetingFeedback = $filtered_arr[$key]["value"];
+                    }
+                }
+
+                $opportunityWon = "";
+                $contractSent = "";
+                if (isset($contactId)) {
+                    $opportunity = $this->findInArray($opportunities, 'contactid',  $contactId);
+                    if (count($opportunity) > 0) {
+                        if ($opportunity['status'] === "won") {
+                            $opportunityWon = "X";
+                            $contractSent = "";
+                        } else {
+                            $opportunityWon = "";
+                            $contractSent = "X";
+                        }
+                    }
+                }
+
+                $item = [
+                    'appointmentid' => $elem['appointmentid'],
+                    'date' => $elem['appointmentstartTime'],
+                    'contactId' => $elem['contactId'],
+                    'customerName' => $elem['contactfirstName'] . ' ' . $elem['contactlastName'],
+                    'assignedUserId' => $elem['assignedUserId'],
+                    'salesPerson' => count($salesPersonName) > 0 ? $salesPersonName['name'] : '',
+                    'callMeeting' => $elem['appointmentStatus'],
+                    'onSite' => count($onSiteEvaluationAppointmentStatus) > 0 ? $onSiteEvaluationAppointmentStatus['appointmentStatus'] : '',
+                    'contractSent' => $contractSent,
+                    'opportunityWon' => $opportunityWon,
+                    'appointmentSetterNotes' => $contractorNotes,
+                    'disposition' => $disposition,
+                    'salesPersonFeedback' => $meetingFeedback,
+                ];
+                array_push($result, $item);
+            }
+            return response()->json(
+                [
+                    'success' => true,
+                    'params' => [
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                    ],
+                    'data' => $result,
+                    'error' => [
+                        'message' => [],
+                    ]
                 ],
-                'data' => $result,
-                'error' => [
-                    'message' => '',
-                ]
-            ],
-            200
-        );
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'params' => [
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                    ],
+                    'data' => [],
+                    'error' => [
+                        'message' => $e->getMessage(),
+                    ]
+                ],
+                200
+            );
+        }
     }
 
     function findInArray($array, $field, $searchedValue)

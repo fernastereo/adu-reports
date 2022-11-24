@@ -3,7 +3,6 @@ import Authenticated from '@/Layouts/MainLayout';
 import { Head } from '@inertiajs/inertia-react';
 import Spinner from '@/Components/Spinner/Spinner';
 import Alertmessage from '@/Components/Alertmessage/Alertmessage';
-import googleSheet from './google-sheets-icon.png';
 import { isEmpty } from 'lodash';
 
 export default function AppointmentReport(props) {
@@ -19,7 +18,6 @@ export default function AppointmentReport(props) {
 		setProcessing(true);
 		
 		try {
-			console.log('dates ', startDate, endDate);
 			if (isEmpty(startDate) || isEmpty(endDate)) {
 				throw new Error('Please set start and end dates to get the report!!');
 			}
@@ -35,25 +33,28 @@ export default function AppointmentReport(props) {
 			fetch(`api/reports/appointmentreport/${startDate}/${endDate}`)
 			.then(response => response.json())
 			.then(response => {
-				console.log(response)
-				const displayData = response.data.map((item, i) => {
-					return(
-						<tr key={i} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-							<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap dark:text-white">{new Date(item.date).toLocaleDateString("en-US")}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.callMeeting}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.onSite}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.contractSent}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.opportunityWon}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.disposition}</th>
-							<th scope="col" className="py-4 px-6 text-xs">{item.salesPersonFeedback}</th>
-						</tr>)
-				})
+				if(response.success){
+					const displayData = response.data.map((item, i) => {
+						return(
+							<tr key={i} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap dark:text-white">{new Date(item.date).toLocaleDateString("en-US")}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.callMeeting}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.onSite}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.contractSent}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.opportunityWon}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.disposition}</th>
+								<th scope="col" className="py-4 px-6 text-xs">{item.salesPersonFeedback}</th>
+							</tr>)
+					})
 
-				setProcessing(false);
-				setRowData(displayData);
+					setProcessing(false);
+					setRowData(displayData);
+				}else{
+					console.error(response.error.message);
+				}
 			});
 
 			setError('');
@@ -61,6 +62,11 @@ export default function AppointmentReport(props) {
 			setError(error.message);
 			setProcessing(false);
 		}
+	}
+
+	const onExport = (e) => {
+		e.preventDefault();
+		console.log('export data');
 	}
 
 	const onChangeStartDate = (e) => {
@@ -114,7 +120,7 @@ export default function AppointmentReport(props) {
 									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
 										Load Data
 									</button>
-									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
+									<button onClick={onExport} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
 										Export
 									</button>
 								</div>
