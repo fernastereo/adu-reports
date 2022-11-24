@@ -17,8 +17,6 @@ class ContactController extends Controller
         $data = $this->callAPI("https://rest.gohighlevel.com/v1/contacts?limit=100");
 
         if ($data["contacts"]) {
-            Contact::truncate();
-
             DB::beginTransaction();
             foreach ($data["contacts"] as $contact) {
                 $newContact = Contact::create([

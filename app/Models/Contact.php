@@ -32,12 +32,12 @@ class Contact extends Model
         'lastActivity'
     ];
 
-    public function tags()
+    public function contactTags()
     {
         return $this->hasMany(ContactTag::class);
     }
 
-    public function customFields()
+    public function contactCustomFields()
     {
         return $this->hasMany(ContactCustomField::class);
     }
