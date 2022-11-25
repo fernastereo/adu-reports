@@ -12,6 +12,7 @@ export default function AppointmentReport(props) {
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
 	const [rowData, setRowData] = useState([]);
+	const [exportData, setExportData] = useState([]);
 
 
 	const onSubmit = (e) => {
@@ -35,7 +36,9 @@ export default function AppointmentReport(props) {
 			.then(response => response.json())
 			.then(response => {
 				if(response.success){
-					const displayData = response.data.map((item, i) => {
+					setExportData(response.data);
+					
+					const displayData = exportData.map((item, i) => {
 						return(
 							<tr key={i} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap dark:text-white">{new Date(item.date).toLocaleDateString("en-US")}</th>
