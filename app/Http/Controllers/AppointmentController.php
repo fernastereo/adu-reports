@@ -149,12 +149,23 @@ class AppointmentController extends Controller
                     ],
                     'data' => $result,
                     'error' => [
-                        'message' => [],
+                        'message' => '',
                     ]
                 ],
                 200
             );
         } catch (Exception $e) {
+            $errorCode = $e->getCode();
+            $error = "";
+            switch ($errorCode) {
+                case '42S22':
+                    $error = "Cannot query to database ($errorCode)";
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
             return response()->json(
                 [
                     'success' => false,
@@ -164,7 +175,7 @@ class AppointmentController extends Controller
                     ],
                     'data' => [],
                     'error' => [
-                        'message' => $e->getMessage(),
+                        'message' => $error,
                     ]
                 ],
                 200

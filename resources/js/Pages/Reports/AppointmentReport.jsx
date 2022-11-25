@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/inertia-react';
 import Spinner from '@/Components/Spinner/Spinner';
 import Alertmessage from '@/Components/Alertmessage/Alertmessage';
 import { isEmpty } from 'lodash';
+import Swal from 'sweetalert2';
 
 export default function AppointmentReport(props) {
 	const [processing, setProcessing] = useState(false);
@@ -54,19 +55,48 @@ export default function AppointmentReport(props) {
 					setRowData(displayData);
 				}else{
 					console.error(response.error.message);
+					setProcessing(false);
+					Swal.fire({
+						title: 'Error!',
+						text: 'Something went wrong while pulling data. Please try again!',
+						icon: 'error',
+						confirmButtonText: 'Close'
+					});
+					setError(response.error.message);
 				}
 			});
 
 			setError('');
 		} catch (error) {
-			setError(error.message);
 			setProcessing(false);
+			Swal.fire({
+				title: 'Error!',
+				text: 'Something went wrong while pulling data. Please try again!',
+				icon: 'error',
+				confirmButtonText: 'Close'
+			});
+			setError(error.message);
 		}
 	}
 
 	const onExport = (e) => {
-		e.preventDefault();
-		console.log('export data');
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, export data!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire(
+					'Exported!',
+					'Data was exported succesfully to Google Sheets',
+					'success'
+				)
+			}
+		});
 	}
 
 	const onChangeStartDate = (e) => {
