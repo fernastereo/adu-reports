@@ -10,12 +10,12 @@ use App\Models\Appointment;
 use App\Models\Opportunity;
 use App\Models\SalesPerson;
 use Illuminate\Http\Request;
+use App\Services\GoogleSheet;
 use App\Models\AppointmentTag;
 use App\Models\ContactCustomField;
 use Illuminate\Support\Facades\DB;
 use App\Models\AppointmentAttachment;
 use App\Models\AppointmentCustomField;
-use Google\Service\Sheets;
 
 class AppointmentController extends Controller
 {
@@ -184,17 +184,36 @@ class AppointmentController extends Controller
         }
     }
 
-    function exportData($data = 'information society')
+    function exportData(Request $request, GoogleSheet $googleSheet)
     {
-
         try {
-            $sheets = Sheets::sheet('RawData')->append([['3', 'name3', 'mail3']]);
+            $input = $request->all();
+            $prevData = $input["data"];
+            $data = [];
+            foreach ($prevData as $value) {
+                $elemData = [];
+                $date = date("d-m-Y", strtotime($value["date"]));
+                $customerName = $value["customerName"] === null ? '' : $value["customerName"];
+                $salesPerson = $value["salesPerson"] === null ? '' : $value["salesPerson"];
+                $callMeeting = $value["callMeeting"] === null ? '' : $value["callMeeting"];
+                $onSite = $value["onSite"] === null ? '' : $value["onSite"];
+                $contractSent = $value["contractSent"] === null ? '' : $value["contractSent"];
+                $opportunityWon = $value["opportunityWon"] === null ? '' : $value["opportunityWon"];
+                $appointmentSetterNotes = $value["appointmentSetterNotes"] === null ? '' : $value["appointmentSetterNotes"];
+                $disposition = $value["disposition"] === null ? '' : $value["disposition"];
+                $salesPersonFeedback = $value["salesPersonFeedback"] === null ? '' : $value["salesPersonFeedback"];
+                array_push($elemData, $date, $customerName, $salesPerson, $callMeeting, $onSite, $contractSent, $opportunityWon, $appointmentSetterNotes, $disposition, $salesPersonFeedback);
+                array_push($data, $elemData);
+            }
+
+            $sheets = $googleSheet->saveRawDataToSheet($data, 'RawData');
 
             return response()->json(
                 [
-                    'success' => false,
+                    'success' => true,
                     'result' => 'exported',
-                    'data' => $sheets,
+                    'data' => $data,
+                    'sheets' => $sheets,
                     'error' => [
                         'message' => '',
                     ]
@@ -205,8 +224,9 @@ class AppointmentController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'result' => 'exported',
-                    'data' => '',
+                    'result' => 'not exported',
+                    'data' => $data,
+                    'sheets' => '',
                     'error' => [
                         'message' => $e->getMessage(),
                     ]

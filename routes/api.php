@@ -23,7 +23,7 @@ Route::get('/sync/salesperson', [SalesPersonController::class, 'sync']);
 Route::get('/sync/opportunity', [OpportunityController::class, 'sync']);
 Route::get('/sync/contact', [ContactController::class, 'sync']);
 Route::get('/reports/appointmentreport/{startDate}/{endDate}', [AppointmentController::class, 'appointmentReport']);
-Route::get('/reports/exportdata', [AppointmentController::class, 'exportData']);
+Route::post('/reports/exportdata', [AppointmentController::class, 'exportData']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
