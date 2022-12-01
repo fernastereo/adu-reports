@@ -15,6 +15,7 @@ use App\Models\ContactCustomField;
 use Illuminate\Support\Facades\DB;
 use App\Models\AppointmentAttachment;
 use App\Models\AppointmentCustomField;
+use Google\Service\Sheets;
 
 class AppointmentController extends Controller
 {
@@ -176,6 +177,38 @@ class AppointmentController extends Controller
                     'data' => [],
                     'error' => [
                         'message' => $error,
+                    ]
+                ],
+                200
+            );
+        }
+    }
+
+    function exportData($data = 'information society')
+    {
+
+        try {
+            $sheets = Sheets::sheet('RawData')->append([['3', 'name3', 'mail3']]);
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'result' => 'exported',
+                    'data' => $sheets,
+                    'error' => [
+                        'message' => '',
+                    ]
+                ],
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'result' => 'exported',
+                    'data' => '',
+                    'error' => [
+                        'message' => $e->getMessage(),
                     ]
                 ],
                 200

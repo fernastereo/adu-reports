@@ -93,11 +93,18 @@ export default function AppointmentReport(props) {
 			confirmButtonText: 'Yes, export data!'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				Swal.fire(
-					'Exported!',
-					'Data was exported succesfully to Google Sheets',
-					'success'
-				)
+				fetch(`api/reports/exportdata`)
+					.then(response => response.json())
+					.then(response => {
+						console.log(response)
+						Swal.fire(
+							'Exported!',
+							'Data was exported succesfully to Google Sheets',
+							'success'
+						)
+					})
+					.catch(error => console.log(error)
+						);
 			}
 		});
 	}
