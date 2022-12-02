@@ -16,19 +16,11 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [DashboardController::class, 'index']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/appointment-report', [DashboardController::class, 'appointmentReport'])->name('main-report');
-Route::get('/sync-data', [DashboardController::class, 'syncData'])->name('sync-data');
 
 //->middleware(['auth', 'verified'])
 

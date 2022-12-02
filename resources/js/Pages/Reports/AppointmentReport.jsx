@@ -14,7 +14,6 @@ export default function AppointmentReport(props) {
 	const [rowData, setRowData] = useState([]);
 	const [exportData, setExportData] = useState([]);
 
-
 	const onSubmit = (e) => {
 		e.preventDefault();
 		setProcessing(true);

@@ -16,9 +16,4 @@ class DashboardController extends Controller
     {
         return Inertia::render('Reports/AppointmentReport');
     }
-
-    public function syncData()
-    {
-        return Inertia::render('SyncData/SyncData');
-    }
 }

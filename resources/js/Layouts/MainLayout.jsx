@@ -24,13 +24,11 @@ export default function Authenticated({ header, children }) {
                                 <NavLink href={route('main-report')} active={route().current('main-report')}>
                                     Appointment Report
                                 </NavLink>
-                                <NavLink href={route('sync-data')} active={route().current('sync-data')}>
-                                    Sync Data
-                                </NavLink>
+                                
                             </div>
                         </div>
 
-                        <div className="hidden sm:flex sm:items-center sm:ml-6">
+                        {/* <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <div className="ml-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -64,7 +62,7 @@ export default function Authenticated({ header, children }) {
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="-mr-2 flex items-center sm:hidden">
                             <button
