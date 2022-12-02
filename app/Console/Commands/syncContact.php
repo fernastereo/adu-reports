@@ -39,7 +39,9 @@ class syncContact extends Command
      */
     public function handle()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Contact::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $result = $this->sync("https://rest.gohighlevel.com/v1/contacts?limit=100");
 
