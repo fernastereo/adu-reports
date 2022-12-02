@@ -39,7 +39,9 @@ class syncSalesPerson extends Command
         $data = $this->client->get("https://rest.gohighlevel.com/v1/users/");
 
         if ($data["users"]) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             SalesPerson::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             DB::beginTransaction();
             foreach ($data["users"] as $user) {

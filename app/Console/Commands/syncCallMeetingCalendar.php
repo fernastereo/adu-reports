@@ -56,10 +56,12 @@ class syncCallMeetingCalendar extends Command
 
         if ($data["appointments"]) {
             //clean appointments tables just when is callMeetingCalendarId
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             Appointment::truncate();
             AppointmentAttachment::truncate();
             AppointmentCustomField::truncate();
             AppointmentTag::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             DB::beginTransaction();
             foreach ($data["appointments"] as $appointment) {
