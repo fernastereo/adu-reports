@@ -53,7 +53,7 @@ class syncContact extends Command
         // ini_set('max_execution_time', 360);
         $data = $this->client->get($url);
 
-        if ($data["contacts"]) {
+        if (count($data["contacts"]) > 0) {
             DB::beginTransaction();
 
             foreach ($data["contacts"] as $contact) {
