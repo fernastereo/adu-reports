@@ -35,7 +35,6 @@ export default function AppointmentReport(props) {
 			fetch(`api/reports/appointmentreport/${startDate}/${endDate}`)
 			.then(response => response.json())
 			.then(response => {
-				console.log(response);
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
 						return(
