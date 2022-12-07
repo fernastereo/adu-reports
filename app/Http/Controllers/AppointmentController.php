@@ -30,7 +30,6 @@ class AppointmentController extends Controller
     public function appointmentReport($startDate, $endDate)
     {
         try {
-            //code...
             ini_set('max_execution_time', 360);
             $result = [];
 
@@ -214,7 +213,7 @@ class AppointmentController extends Controller
                 array_push($data, $elemData);
             }
 
-            $sheets = $googleSheet->saveRawDataToSheet($data, 'RawData');
+            $sheets = $googleSheet->saveRawDataToSheet($data, 'RawDataAppointments');
 
             return response()->json(
                 [

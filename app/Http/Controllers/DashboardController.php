@@ -16,4 +16,9 @@ class DashboardController extends Controller
     {
         return Inertia::render('Reports/AppointmentReport');
     }
+
+    public function contactReport()
+    {
+        return Inertia::render('Reports/ContactReport');
+    }
 }
