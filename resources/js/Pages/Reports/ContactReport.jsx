@@ -31,7 +31,7 @@ export default function ContactReport(props) {
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
 						return(
-							<tr key={i} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap dark:text-white">{new Date(item.date).toLocaleDateString("en-US")}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
@@ -160,7 +160,7 @@ export default function ContactReport(props) {
 						{!processing && 
 						<div className="overflow-x-auto">
 						<table className="min-w-full">
-							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
 								<tr>
 									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Date</th>
 									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Customer Name</th>
