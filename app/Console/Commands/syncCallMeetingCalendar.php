@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Models\AppointmentAttachment;
 use App\Models\AppointmentCustomField;
+use App\Models\Job;
 use App\Services\APIClient;
 
 class syncCallMeetingCalendar extends Command
@@ -125,9 +126,18 @@ class syncCallMeetingCalendar extends Command
             }
             DB::commit();
 
+            Job::create([
+                'jobresult' => 'SUCCESS',
+                'jobname' => 'sync:callMeetingCalendar'
+            ]);
+
             return Command::SUCCESS;
         }
 
+        Job::create([
+            'jobresult' => 'FAILURE',
+            'jobname' => 'sync:callMeetingCalendar'
+        ]);
         return Command::FAILURE;
     }
 }

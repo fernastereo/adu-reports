@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Job;
 use App\Models\SalesPerson;
 use App\Services\APIClient;
 use Illuminate\Console\Command;
@@ -57,8 +58,18 @@ class syncSalesPerson extends Command
             }
             DB::commit();
 
+            Job::create([
+                'jobresult' => 'SUCCESS',
+                'jobname' => 'sync:SalesPerson'
+            ]);
+
             return Command::SUCCESS;
         }
+
+        Job::create([
+            'jobresult' => 'FAILURE',
+            'jobname' => 'sync:SalesPerson'
+        ]);
 
         return Command::FAILURE;
     }
