@@ -21,9 +21,10 @@ class syncCallMeetingCalendar extends Command
     protected $signature = 'sync:callMeetingCalendar';
     protected $client;
     /**
-     * The console command description.
-     *
-     * @var string
+     * 1. This command should be executed before syncOnSiteCalendar command 
+     * 2. Deletes Appointments tables
+     * 3. Call gohighlevel api n months before and 1 month after current date (see .env file)
+     * 4. Populate Appointments tables with CallMeetingCalendar
      */
     protected $description = 'Syncs table Appointment with appointments api (CallMeeting calendar)';
 

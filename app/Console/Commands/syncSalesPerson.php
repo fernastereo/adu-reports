@@ -30,9 +30,9 @@ class syncSalesPerson extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return int
+     * 1. Deletes SalesPersons table
+     * 2. Call gohighlevel api (users)
+     * 3. Populate SalesPersons table
      */
     public function handle()
     {

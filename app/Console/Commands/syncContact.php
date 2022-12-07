@@ -20,9 +20,9 @@ class syncContact extends Command
     protected $signature = 'sync:contact';
     protected $client;
     /**
-     * The console command description.
-     *
-     * @var string
+     * 1. Deletes Contacts table
+     * 2. Call gohighlevel api (contacts)
+     * 3. Populate Contacts table (recursively)
      */
     protected $description = 'Syncs table contacts with contacts api';
 

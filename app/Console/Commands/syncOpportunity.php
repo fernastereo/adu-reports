@@ -32,9 +32,9 @@ class syncOpportunity extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return int
+     * 1. Deletes Opportunities table
+     * 2. Call gohighlevel api (pipelines)
+     * 3. Populate Opportunities table (recursively)
      */
     public function handle()
     {
