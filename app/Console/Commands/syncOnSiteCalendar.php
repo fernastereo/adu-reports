@@ -21,7 +21,10 @@ class syncOnSiteCalendar extends Command
     protected $signature = 'sync:onSiteCalendar';
     protected $client;
     /**
-     * The console command description.
+     * 1. This command should be executed after syncCallMeetingCalendar command 
+     * (Never run it before because data will be lost when you run syncCallMeetingCalendar)
+     * 2. Call gohighlevel api n months before and 1 month after current date (see .env file)
+     * 3. Populate Appointments tables with OnSiteCalendar
      *
      * @var string
      */
