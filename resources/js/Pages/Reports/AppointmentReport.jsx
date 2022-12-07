@@ -37,8 +37,8 @@ export default function AppointmentReport(props) {
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
 						return(
-							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap dark:text-white">{new Date(item.date).toLocaleDateString("en-US")}</th>
+							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
+								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.callMeeting}</th>
