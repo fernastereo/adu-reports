@@ -60,7 +60,7 @@ class syncSalesPerson extends Command
 
             Job::create([
                 'jobresult' => 'SUCCESS',
-                'jobname' => 'sync:SalesPerson'
+                'jobname' => 'sync:salesPerson'
             ]);
 
             return Command::SUCCESS;
@@ -68,7 +68,7 @@ class syncSalesPerson extends Command
 
         Job::create([
             'jobresult' => 'FAILURE',
-            'jobname' => 'sync:SalesPerson'
+            'jobname' => 'sync:salesPerson'
         ]);
 
         return Command::FAILURE;
