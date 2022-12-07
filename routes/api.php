@@ -19,7 +19,9 @@ use App\Http\Controllers\SalesPersonController;
 */
 
 Route::get('/reports/appointmentreport/{startDate}/{endDate}', [AppointmentController::class, 'appointmentReport']);
-Route::post('/reports/exportdata', [AppointmentController::class, 'exportData']);
+Route::get('/reports/contactreport/{startDate}', [ContactController::class, 'contactReport']);
+Route::post('/reports/exportappointments', [AppointmentController::class, 'exportData']);
+Route::post('/reports/exportcontacts', [ContactController::class, 'exportData']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

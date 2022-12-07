@@ -6,11 +6,10 @@ import Alertmessage from '@/Components/Alertmessage/Alertmessage';
 import { isEmpty } from 'lodash';
 import Swal from 'sweetalert2';
 
-export default function AppointmentReport(props) {
+export default function ContactReport(props) {
 	const [processing, setProcessing] = useState(false);
 	const [error, setError] = useState('');
 	const [startDate, setStartDate] = useState('');
-	const [endDate, setEndDate] = useState('');
 	const [rowData, setRowData] = useState([]);
 	const [exportData, setExportData] = useState([]);
 
@@ -19,19 +18,14 @@ export default function AppointmentReport(props) {
 		setProcessing(true);
 		
 		try {
-			if (isEmpty(startDate) || isEmpty(endDate)) {
-				throw new Error('Please set start and end dates to get the report!!');
+			if (isEmpty(startDate)) {
+				throw new Error('Please set start date to get the report!!');
 			}
 
 			const sDate = new Date(startDate);
 			sDate.setDate(sDate.getDate() + 1);
-			const eDate = new Date(endDate);
 
-			if (sDate > eDate) {
-				throw new Error('End date should be greater than Start date!!');
-			}
-
-			fetch(`api/reports/appointmentreport/${startDate}/${endDate}`)
+			fetch(`api/reports/contactreport/${startDate}`)
 			.then(response => response.json())
 			.then(response => {
 				if(response.success){
@@ -95,12 +89,12 @@ export default function AppointmentReport(props) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ 'data': exportData })
 				};
-				fetch(`api/reports/exportappointments`, requestOptions)
+				fetch(`api/reports/exportcontacts`, requestOptions)
 					.then(response => response.json())
 					.then(response => {
 						Swal.fire(
 							'Exported!',
-							'Appointment Report was exported succesfully to Google Sheets',
+							'Contact Report was exported succesfully to Google Sheets',
 							'success'
 						)
 					})
@@ -111,10 +105,6 @@ export default function AppointmentReport(props) {
 
 	const onChangeStartDate = (e) => {
 		setStartDate(e.target.value);
-	}
-
-	const onChangeEndDate = (e) => {
-		setEndDate(e.target.value);
 	}
 
 	const closeAlert = () => {
@@ -139,20 +129,11 @@ export default function AppointmentReport(props) {
 							<div className="flex justify-between text-sm font-medium">
 								<div className="flex space-x-4 mx-6 my-6">
 									<div className="col-span-6 sm:col-span-3">
-										<label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date:</label>
+										<label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Contacts created since:</label>
 										<input type="date" name="startDate" 
 											onChange={onChangeStartDate}
 											disabled ={processing}
 											value={startDate} id="startDate" autoComplete="given-name" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-										</input>
-									</div>
-
-									<div className="col-span-6 sm:col-span-3">
-										<label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date:</label>
-										<input type="date" name="endDate" 
-											onChange={onChangeEndDate}
-											disabled ={processing}
-											value={endDate} id="endDate" autoComplete="family-name" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 										</input>
 									</div>
 								</div>							

@@ -21,6 +21,7 @@ Route::get('/', [DashboardController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/appointment-report', [DashboardController::class, 'appointmentReport'])->name('main-report');
+Route::get('/contact-report', [DashboardController::class, 'contactReport'])->name('contact-report');
 
 //->middleware(['auth', 'verified'])
 
