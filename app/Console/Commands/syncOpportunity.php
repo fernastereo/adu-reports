@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DateTime;
+use App\Models\Job;
 use App\Models\Opportunity;
 use App\Services\APIClient;
 use App\Models\OpportunityTag;
@@ -43,6 +44,11 @@ class syncOpportunity extends Command
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $result = $this->sync("https://rest.gohighlevel.com/v1/pipelines/nIcczYbNQA6WLkFkbHrb/opportunities?limit=100&stageId=65bc9a79-6f5c-487d-b91d-bf8729a0d8ee");
+
+        Job::create([
+            'jobresult' => $result ? 'SUCCESS' : 'FAILURE',
+            'jobname' => 'sync:opportunity'
+        ]);
 
         return $result ? Command::SUCCESS : Command::FAILURE;
     }

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DateTime;
+use App\Models\Job;
 use App\Models\Appointment;
 use App\Services\APIClient;
 use App\Models\AppointmentTag;
@@ -118,8 +119,18 @@ class syncOnSiteCalendar extends Command
             }
             DB::commit();
 
+            Job::create([
+                'jobresult' => 'SUCCESS',
+                'jobname' => 'sync:onSiteCalendar'
+            ]);
+
             return Command::SUCCESS;
         }
+
+        Job::create([
+            'jobresult' => 'FAILURE',
+            'jobname' => 'sync:onSiteCalendar'
+        ]);
 
         return Command::FAILURE;
     }

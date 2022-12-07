@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DateTime;
+use App\Models\Job;
 use App\Models\Contact;
 use App\Models\ContactTag;
 use App\Services\APIClient;
@@ -44,6 +45,11 @@ class syncContact extends Command
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $result = $this->sync("https://rest.gohighlevel.com/v1/contacts?limit=100");
+
+        Job::create([
+            'jobresult' => $result ? 'SUCCESS' : 'FAILURE',
+            'jobname' => 'sync:contact'
+        ]);
 
         return $result ? Command::SUCCESS : Command::FAILURE;
     }
