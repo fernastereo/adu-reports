@@ -29,7 +29,7 @@ export default function AppointmentReport(props) {
 		e.preventDefault();
 		setProcessing(true);
 		
-		// try {
+		try {
 			if (isEmpty(startDate) || isEmpty(endDate)) {
 				throw new Error('Please set start and end dates to get the report!!');
 			}
@@ -80,16 +80,16 @@ export default function AppointmentReport(props) {
 			});
 
 			setError('');
-		// } catch (error) {
-		// 	setProcessing(false);
-		// 	Swal.fire({
-		// 		title: 'Error!!',
-		// 		text: 'Something went wrong while pulling data. Please try again!!',
-		// 		icon: 'error',
-		// 		confirmButtonText: 'Close'
-		// 	});
-		// 	setError(error.message);
-		// }
+		} catch (error) {
+			setProcessing(false);
+			Swal.fire({
+				title: 'Error!!',
+				text: 'Something went wrong while pulling data. Please try again!!',
+				icon: 'error',
+				confirmButtonText: 'Close'
+			});
+			setError(error.message);
+		}
 	}
 
 	const onExport = (e) => {
