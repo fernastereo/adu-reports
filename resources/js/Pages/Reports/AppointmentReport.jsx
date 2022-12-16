@@ -47,20 +47,20 @@ export default function AppointmentReport(props) {
 			.then(response => {
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
-						const callMeetingColor = item.callMeeting === 'showed' ? 'text-green-600' : item.callMeeting === 'confirmed' ? 'text-blue-600' : item.callMeeting === 'cancelled' ? 'text-red-600' : '';
-						const onSiteColor = item.onSite === 'showed' ? 'text-green-600' : item.onSite === 'confirmed' ? 'text-blue-600' : item.onSite === 'cancelled' ? 'text-red-600' : '';
+						const callMeetingColor = item.callMeeting === 'showed' ? 'text-green-600 bg-green-200' : item.callMeeting === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.callMeeting === 'cancelled' ? 'text-red-600 bg-red-200' : '';
+						const onSiteColor = item.onSite === 'showed' ? 'text-green-600 bg-green-200' : item.onSite === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.onSite === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						return(
 							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
-								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
-								<th scope="col" className={`py-4 px-6 text-xs uppercase ${callMeetingColor}`}>{item.callMeeting}</th>
-								<th scope="col" className={`py-4 px-6 text-xs uppercase ${onSiteColor}`}>{item.onSite}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.contractSent}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.opportunityWon}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.disposition}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.salesPersonFeedback}</th>
+								<td className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</td>
+								<td className="py-4 px-6 text-xs">{item.customerName}</td>
+								<td className="py-4 px-6 text-xs">{item.salesPerson}</td>
+								<td><p className={`py-2 px-2 text-xs text-center uppercase rounded-full ${callMeetingColor}`}>{item.callMeeting}</p></td>
+								<td><p className={`py-2 px-2 text-xs text-center uppercase rounded-full ${onSiteColor}`}>{item.onSite}</p></td>
+								<td className="py-4 px-6 text-xs">{item.contractSent}</td>
+								<td className="py-4 px-6 text-xs">{item.opportunityWon}</td>
+								<td className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</td>
+								<td className="py-4 px-6 text-xs">{item.disposition}</td>
+								<td className="py-4 px-6 text-xs">{item.salesPersonFeedback}</td>
 							</tr>)
 					});
 					setExportData(response.data);
@@ -191,19 +191,19 @@ export default function AppointmentReport(props) {
 					<div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 						{!processing && 
 						<div className="overflow-x-auto">
-						<table className="min-w-full">
+						<table className="table-fixed">
 							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
 								<tr>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Date</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Customer Name</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Call Meeting</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">On Site</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Contract Sent</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Opportunity Won</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Appointment Setter Notes</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Disposition</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person Feedback</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Date</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Customer Name</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Call Meeting</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">On Site</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Contract Sent</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Opportunity Won</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2 w-1/8">Appointment Setter Notes</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Disposition</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person Feedback</th>
 								</tr>
 							</thead>
 							<tbody>
