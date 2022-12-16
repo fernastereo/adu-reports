@@ -98,7 +98,7 @@ class ContactController extends Controller
 
                         if (count($filtered_arr) > 0) {
                             $key = array_keys($filtered_arr)[0];
-                            $meetingFeedback = $filtered_arr[$key]["value"];
+                            $disposition = $filtered_arr[$key]["value"];
                         }
                     }
 
