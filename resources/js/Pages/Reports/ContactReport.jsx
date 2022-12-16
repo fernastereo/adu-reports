@@ -9,10 +9,17 @@ import Swal from 'sweetalert2';
 export default function ContactReport(props) {
 	const [processing, setProcessing] = useState(false);
 	const [error, setError] = useState('');
-	const [startDate, setStartDate] = useState('');
 	const [rowData, setRowData] = useState([]);
 	const [exportData, setExportData] = useState([]);
 
+	const getStartDate = () => {
+		const currDate = new Date();
+		currDate.setMonth(currDate.getMonth() - 1);
+		return currDate.toISOString().substring(0, 10);
+	}
+
+	const [startDate, setStartDate] = useState(getStartDate());
+	
 	const onSubmit = (e) => {
 		e.preventDefault();
 		setProcessing(true);
@@ -30,13 +37,15 @@ export default function ContactReport(props) {
 			.then(response => {
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
+						const callMeetingColor = item.callMeeting === 'showed' ? 'text-green-600' : item.callMeeting === 'confirmed' ? 'text-blue-600' : item.callMeeting === 'cancelled' ? 'text-red-600' : '';
+						const onSiteColor = item.onSite === 'showed' ? 'text-green-600' : item.onSite === 'confirmed' ? 'text-blue-600' : item.onSite === 'cancelled' ? 'text-red-600' : '';
 						return(
 							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
 								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.customerName}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.salesPerson}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.callMeeting}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.onSite}</th>
+								<th scope="col" className={`py-4 px-6 text-xs uppercase ${callMeetingColor}`}>{item.callMeeting}</th>
+								<th scope="col" className={`py-4 px-6 text-xs uppercase ${onSiteColor}`}>{item.onSite}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.contractSent}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.opportunityWon}</th>
 								<th scope="col" className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</th>
