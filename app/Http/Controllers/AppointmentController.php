@@ -183,7 +183,7 @@ class AppointmentController extends Controller
                     ],
                     'data' => [],
                     'error' => [
-                        'message' => $error,
+                        'message' => $e->getMessage(),
                     ]
                 ],
                 200

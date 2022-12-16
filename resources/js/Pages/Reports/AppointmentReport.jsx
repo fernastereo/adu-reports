@@ -83,8 +83,8 @@ export default function AppointmentReport(props) {
 		// } catch (error) {
 		// 	setProcessing(false);
 		// 	Swal.fire({
-		// 		title: 'Error!',
-		// 		text: 'Something went wrong while pulling data. Please try again!',
+		// 		title: 'Error!!',
+		// 		text: 'Something went wrong while pulling data. Please try again!!',
 		// 		icon: 'error',
 		// 		confirmButtonText: 'Close'
 		// 	});
