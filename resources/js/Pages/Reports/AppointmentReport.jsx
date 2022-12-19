@@ -201,7 +201,7 @@ export default function AppointmentReport(props) {
 									<th className="text-sm font-medium text-gray-900 px-6 py-2">On Site</th>
 									<th className="text-sm font-medium text-gray-900 px-6 py-2">Contract Sent</th>
 									<th className="text-sm font-medium text-gray-900 px-6 py-2">Opportunity Won</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2 w-1/8">Appointment Setter Notes</th>
+									<th className="text-sm font-medium text-gray-900 px-6 py-2">Appointment Setter Notes</th>
 									<th className="text-sm font-medium text-gray-900 px-6 py-2">Disposition</th>
 									<th className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person Feedback</th>
 								</tr>
