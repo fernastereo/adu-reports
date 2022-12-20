@@ -58,8 +58,8 @@ class emailIncompleteLeads extends Command
 
             //preparar los datos para el reporte general
             $preparedData = $this->prepareData($report, true);
-            echo "prepparó los datos" . PHP_EOL;
-            echo $preparedData['dataToSend'] . PHP_EOL;
+            echo "preparó los datos" . PHP_EOL;
+            dd($preparedData['dataToSend']);
             if ($preparedData['dataToSend'] > 0) {
                 echo "trajo algo" . PHP_EOL;
                 $data = [
