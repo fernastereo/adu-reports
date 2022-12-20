@@ -316,7 +316,7 @@ class AppointmentController extends Controller
                 return $newContact;
             }
         } catch (\Throwable $th) {
-            return $con;
+            dd($con);
         }
 
         return null;
