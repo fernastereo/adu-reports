@@ -36,7 +36,7 @@ class emailIncompleteLeads extends Command
      */
     public function handle()
     {
-        echo "Entró " . $data["to"] . PHP_EOL;
+        echo "Entró " . PHP_EOL;
         $mbs = config('constants.days_before_start_send_email_incomplete');
         $mas = config('constants.days_before_end_send_email_incomplete');
 
