@@ -37,7 +37,6 @@ class emailIncompleteLeads extends Command
     public function handle()
     {
         try {
-            echo "Entró " . PHP_EOL;
             $mbs = config('constants.days_before_start_send_email_incomplete');
             $mas = config('constants.days_before_end_send_email_incomplete');
 
@@ -47,23 +46,17 @@ class emailIncompleteLeads extends Command
             $endDate = date("Y-m-d", strtotime($endDate . "-$mas days")); //n days before today
 
             $request = Request::create("api/reports/appointmentreport/$startDate/$endDate", 'GET');
-            echo "llamó al api" . PHP_EOL;
+
             $response = app()->handle($request);
-            echo "devuelve el json" . PHP_EOL;
-            dd($response);
 
             $report = json_decode($response->getContent(), true);
 
             $url = "https://api.mailgun.net/v3/" . config('services.mailgun.domain') . "/messages";
 
-            echo "antes de preparar datos" . PHP_EOL;
-
             //preparar los datos para el reporte general
             $preparedData = $this->prepareData($report, true);
-            echo "preparó los datos" . PHP_EOL;
-            dd($report);
+
             if ($preparedData['dataToSend']) {
-                echo "trajo algo" . PHP_EOL;
                 $data = [
                     'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                     'to' => config('mail.send_reports_to'),
@@ -95,7 +88,7 @@ class emailIncompleteLeads extends Command
 
                     //Call Mailgun API
                     $res = $this->client->sendEmail($url, $data);
-
+                    echo "llamó al api y ";
                     if (count($res) > 0) {
                         echo "Report sent to " . $data["to"] . PHP_EOL;
                     }
