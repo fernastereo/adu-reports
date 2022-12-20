@@ -57,8 +57,9 @@ class emailIncompleteLeads extends Command
 
         //preparar los datos para el reporte general
         [$dataToSend, $reportData] = $this->prepareData($report, true);
-
+        echo "preparó los datos" . PHP_EOL;
         if ($dataToSend > 0) {
+            echo "trajo algo" . PHP_EOL;
             $data = [
                 'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                 'to' => config('mail.send_reports_to'),
@@ -68,7 +69,7 @@ class emailIncompleteLeads extends Command
 
             //Call Mailgun API
             $res = $this->client->sendEmail($url, $data);
-
+            echo "llamó al api" . PHP_EOL;
             if (count($res) > 0) {
                 echo "Report sent to " . $data["to"] . PHP_EOL;
             }
