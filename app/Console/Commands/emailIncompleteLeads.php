@@ -50,6 +50,8 @@ class emailIncompleteLeads extends Command
             echo "llamó al api" . PHP_EOL;
             $response = app()->handle($request);
             echo "devuelve el json" . PHP_EOL;
+            dd($response);
+
             $report = json_decode($response->getContent(), true);
 
             $url = "https://api.mailgun.net/v3/" . config('services.mailgun.domain') . "/messages";
