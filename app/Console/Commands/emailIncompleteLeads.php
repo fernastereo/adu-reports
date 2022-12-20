@@ -58,12 +58,16 @@ class emailIncompleteLeads extends Command
             $data = [
                 'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                 'to' => config('mail.send_reports_to'),
-                'subject' => 'Leads without Disposition and Feedback',
+                'subject' => '[GENERAL REPORT] Leads without Disposition and Feedback',
                 'html' => $reportData
             ];
 
             //Call Mailgun API
             $res = $this->client->sendEmail($url, $data);
+
+            if (count($res) > 0) {
+                echo "Report sent to " . $data["to"] . PHP_EOL;
+            }
         }
 
         $salesPersons = SalesPerson::all();
@@ -80,7 +84,12 @@ class emailIncompleteLeads extends Command
                     'html' => $reportData
                 ];
 
+                //Call Mailgun API
                 $res = $this->client->sendEmail($url, $data);
+
+                if (count($res) > 0) {
+                    echo "Report sent to " . $data["to"] . PHP_EOL;
+                }
             }
         }
 
