@@ -36,69 +36,73 @@ class emailIncompleteLeads extends Command
      */
     public function handle()
     {
-        echo "Entró " . PHP_EOL;
-        $mbs = config('constants.days_before_start_send_email_incomplete');
-        $mas = config('constants.days_before_end_send_email_incomplete');
+        try {
+            echo "Entró " . PHP_EOL;
+            $mbs = config('constants.days_before_start_send_email_incomplete');
+            $mas = config('constants.days_before_end_send_email_incomplete');
 
-        $endDate = date('Y-m-d'); //today
+            $endDate = date('Y-m-d'); //today
 
-        $startDate = date("Y-m-d", strtotime($endDate . "-$mbs days")); //n days before today
-        $endDate = date("Y-m-d", strtotime($endDate . "-$mas days")); //n days before today
+            $startDate = date("Y-m-d", strtotime($endDate . "-$mbs days")); //n days before today
+            $endDate = date("Y-m-d", strtotime($endDate . "-$mas days")); //n days before today
 
-        $request = Request::create("api/reports/appointmentreport/$startDate/$endDate", 'GET');
-        echo "llamó al api" . PHP_EOL;
-        $response = app()->handle($request);
-        echo "devuelve el json" . PHP_EOL;
-        $report = json_decode($response->getContent(), true);
-
-        $url = "https://api.mailgun.net/v3/" . config('services.mailgun.domain') . "/messages";
-
-        echo "antes de preparar datos" . PHP_EOL;
-
-        //preparar los datos para el reporte general
-        $preparedData = $this->prepareData($report, true);
-        echo "preparó los datos" . PHP_EOL;
-        if ($preparedData['dataToSend'] > 0) {
-            echo "trajo algo" . PHP_EOL;
-            $data = [
-                'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
-                'to' => config('mail.send_reports_to'),
-                'subject' => '[GENERAL REPORT] Leads without Disposition and Feedback',
-                'html' => $preparedData['reportData']
-            ];
-
-            //Call Mailgun API
-            $res = $this->client->sendEmail($url, $data);
+            $request = Request::create("api/reports/appointmentreport/$startDate/$endDate", 'GET');
             echo "llamó al api" . PHP_EOL;
-            if (count($res) > 0) {
-                echo "Report sent to " . $data["to"] . PHP_EOL;
-            }
-        }
+            $response = app()->handle($request);
+            echo "devuelve el json" . PHP_EOL;
+            $report = json_decode($response->getContent(), true);
 
-        $salesPersons = SalesPerson::all();
-        foreach ($salesPersons as $person) {
-            //preparar los datos para el reporte de cada salesPerson
-            $preparedData = $this->prepareData($report, false, $person);
+            $url = "https://api.mailgun.net/v3/" . config('services.mailgun.domain') . "/messages";
 
+            echo "antes de preparar datos" . PHP_EOL;
+
+            //preparar los datos para el reporte general
+            $preparedData = $this->prepareData($report, true);
+            echo "preparó los datos" . PHP_EOL;
             if ($preparedData['dataToSend'] > 0) {
+                echo "trajo algo" . PHP_EOL;
                 $data = [
                     'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
-                    'to' => 'fernandoecueto@gmail.com',
-                    'cc' => config('mail.send_reports_to'),
-                    'subject' => $person->name . ' :Leads without Disposition and Feedback',
+                    'to' => config('mail.send_reports_to'),
+                    'subject' => '[GENERAL REPORT] Leads without Disposition and Feedback',
                     'html' => $preparedData['reportData']
                 ];
 
                 //Call Mailgun API
                 $res = $this->client->sendEmail($url, $data);
-
+                echo "llamó al api" . PHP_EOL;
                 if (count($res) > 0) {
                     echo "Report sent to " . $data["to"] . PHP_EOL;
                 }
             }
-        }
 
-        return Command::SUCCESS;
+            $salesPersons = SalesPerson::all();
+            foreach ($salesPersons as $person) {
+                //preparar los datos para el reporte de cada salesPerson
+                $preparedData = $this->prepareData($report, false, $person);
+
+                if ($preparedData['dataToSend'] > 0) {
+                    $data = [
+                        'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
+                        'to' => 'fernandoecueto@gmail.com',
+                        'cc' => config('mail.send_reports_to'),
+                        'subject' => $person->name . ' :Leads without Disposition and Feedback',
+                        'html' => $preparedData['reportData']
+                    ];
+
+                    //Call Mailgun API
+                    $res = $this->client->sendEmail($url, $data);
+
+                    if (count($res) > 0) {
+                        echo "Report sent to " . $data["to"] . PHP_EOL;
+                    }
+                }
+            }
+
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function prepareData($data, $all, $person = null)
