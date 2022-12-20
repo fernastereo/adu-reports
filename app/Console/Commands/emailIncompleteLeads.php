@@ -90,7 +90,7 @@ class emailIncompleteLeads extends Command
                     $res = $this->client->sendEmail($url, $data);
                     echo "llamó al api y ";
                     if (count($res) > 0) {
-                        echo "Report sent to " . $data["to"] . PHP_EOL;
+                        echo "Report sent to " . $person->email . PHP_EOL;
                     }
                 }
             }
