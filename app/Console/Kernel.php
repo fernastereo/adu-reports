@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sync:contact')->dailyAt('08:00');
         $schedule->command('sync:opportunity')->dailyAt('11:40');
         $schedule->command('sync:salesPerson')->weekly();
+        $schedule->command('email:incompleteleads')->weekly()->days([1, 3, 5])->at('7:00');
     }
 
     /**

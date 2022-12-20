@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Job;
 use App\Models\SalesPerson;
 use App\Services\APIClient;
 use Illuminate\Http\Request;
@@ -95,9 +96,22 @@ class emailIncompleteLeads extends Command
                 }
             }
 
+            Job::create([
+                'jobresult' => 'SUCCESS',
+                'jobname' => 'email:incompleteleads'
+            ]);
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
+
+            Job::create([
+                'jobresult' => 'FAILURE',
+                'jobname' => 'email:incompleteleads'
+            ]);
+
             echo $e->getMessage();
+
+            return Command::FAILURE;
         }
     }
 
