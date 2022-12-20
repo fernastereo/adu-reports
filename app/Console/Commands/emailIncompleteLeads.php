@@ -36,7 +36,7 @@ class emailIncompleteLeads extends Command
      */
     public function handle()
     {
-
+        echo "Entró " . $data["to"] . PHP_EOL;
         $mbs = config('constants.days_before_start_send_email_incomplete');
         $mas = config('constants.days_before_end_send_email_incomplete');
 
@@ -46,17 +46,19 @@ class emailIncompleteLeads extends Command
         $endDate = date("Y-m-d", strtotime($endDate . "-$mas days")); //n days before today
 
         $request = Request::create("api/reports/appointmentreport/$startDate/$endDate", 'GET');
+        echo "llamó al api" . PHP_EOL;
         $response = app()->handle($request);
+        echo "devuelve el json" . PHP_EOL;
         $report = json_decode($response->getContent(), true);
 
         $url = "https://api.mailgun.net/v3/" . config('services.mailgun.domain') . "/messages";
-        echo "1" . PHP_EOL;
+
+        echo "antes de preparar datos" . PHP_EOL;
+
         //preparar los datos para el reporte general
         [$dataToSend, $reportData] = $this->prepareData($report, true);
 
         if ($dataToSend > 0) {
-            echo "2" . PHP_EOL;
-
             $data = [
                 'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                 'to' => config('mail.send_reports_to'),
@@ -68,22 +70,16 @@ class emailIncompleteLeads extends Command
             $res = $this->client->sendEmail($url, $data);
 
             if (count($res) > 0) {
-                echo "3" . PHP_EOL;
-
                 echo "Report sent to " . $data["to"] . PHP_EOL;
             }
         }
 
         $salesPersons = SalesPerson::all();
         foreach ($salesPersons as $person) {
-            echo "4" . PHP_EOL;
-
             //preparar los datos para el reporte de cada salesPerson
             [$dataToSend, $reportData] = $this->prepareData($report, false, $person);
 
             if ($dataToSend > 0) {
-                echo "5" . PHP_EOL;
-
                 $data = [
                     'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                     'to' => 'fernandoecueto@gmail.com',
@@ -96,7 +92,6 @@ class emailIncompleteLeads extends Command
                 $res = $this->client->sendEmail($url, $data);
 
                 if (count($res) > 0) {
-                    echo "6" . PHP_EOL;
                     echo "Report sent to " . $data["to"] . PHP_EOL;
                 }
             }
