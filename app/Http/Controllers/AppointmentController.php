@@ -298,9 +298,10 @@ class AppointmentController extends Controller
                     ]);
                 }
             }
-            dd($newContact);
             if (is_array($data["contact"]['customField'])) {
                 foreach ($data["contact"]['customField'] as $customField) {
+                    dd($newContact->id);
+
                     ContactCustomField::create([
                         'customFieldId' => $customField['id'],
                         'value' => $customField['value'],
