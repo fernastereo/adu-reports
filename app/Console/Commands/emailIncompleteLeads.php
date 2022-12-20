@@ -56,15 +56,15 @@ class emailIncompleteLeads extends Command
         echo "antes de preparar datos" . PHP_EOL;
 
         //preparar los datos para el reporte general
-        [$dataToSend, $reportData] = $this->prepareData($report, true);
+        $preparedData = $this->prepareData($report, true);
         echo "preparó los datos" . PHP_EOL;
-        if ($dataToSend > 0) {
+        if ($preparedData['dataToSend'] > 0) {
             echo "trajo algo" . PHP_EOL;
             $data = [
                 'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                 'to' => config('mail.send_reports_to'),
                 'subject' => '[GENERAL REPORT] Leads without Disposition and Feedback',
-                'html' => $reportData
+                'html' => $preparedData['reportData']
             ];
 
             //Call Mailgun API
@@ -78,15 +78,15 @@ class emailIncompleteLeads extends Command
         $salesPersons = SalesPerson::all();
         foreach ($salesPersons as $person) {
             //preparar los datos para el reporte de cada salesPerson
-            [$dataToSend, $reportData] = $this->prepareData($report, false, $person);
+            $preparedData = $this->prepareData($report, false, $person);
 
-            if ($dataToSend > 0) {
+            if ($preparedData['dataToSend'] > 0) {
                 $data = [
                     'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                     'to' => 'fernandoecueto@gmail.com',
                     'cc' => config('mail.send_reports_to'),
                     'subject' => $person->name . ' :Leads without Disposition and Feedback',
-                    'html' => $reportData
+                    'html' => $preparedData['reportData']
                 ];
 
                 //Call Mailgun API
@@ -134,6 +134,6 @@ class emailIncompleteLeads extends Command
         }
         $result .= "</tbody></table></html>";
 
-        return [$dataToSend, $result];
+        return ['dataToSend' => $dataToSend, 'result' => $result];
     }
 }
