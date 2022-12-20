@@ -300,7 +300,7 @@ class AppointmentController extends Controller
                         ]);
                     }
                 }
-                $con = $newContact;
+                $con = $newContact->id;
                 if (is_array($data["contact"]['customField'])) {
                     foreach ($data["contact"]['customField'] as $customField) {
                         ContactCustomField::create([
@@ -316,6 +316,7 @@ class AppointmentController extends Controller
                 return $newContact;
             }
         } catch (\Throwable $th) {
+            $con = 'error: ' . $con;
             dd($con);
         }
 
