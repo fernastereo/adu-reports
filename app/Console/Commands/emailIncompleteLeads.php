@@ -61,7 +61,7 @@ class emailIncompleteLeads extends Command
                     'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                     'to' => config('mail.send_reports_to'),
                     'subject' => '[GENERAL REPORT] Leads without Disposition and Feedback',
-                    'html' => $preparedData['reportData']
+                    'html' => $preparedData['result']
                 ];
 
                 //Call Mailgun API
@@ -83,7 +83,7 @@ class emailIncompleteLeads extends Command
                         'to' => 'fernandoecueto@gmail.com',
                         'cc' => config('mail.send_reports_to'),
                         'subject' => $person->name . ' :Leads without Disposition and Feedback',
-                        'html' => $preparedData['reportData']
+                        'html' => $preparedData['result']
                     ];
 
                     //Call Mailgun API
