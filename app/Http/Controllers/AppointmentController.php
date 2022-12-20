@@ -262,55 +262,61 @@ class AppointmentController extends Controller
 
     function syncContact($contactId)
     {
-        ini_set('max_execution_time', 360);
-        $data = $this->client->get("https://rest.gohighlevel.com/v1/contacts/$contactId");
+        $con = "";
+        try {
+            ini_set('max_execution_time', 360);
+            $data = $this->client->get("https://rest.gohighlevel.com/v1/contacts/$contactId");
 
-        if ($data["contact"]) {
-            DB::beginTransaction();
-            $newContact = Contact::create([
-                'contactid' => isset($data["contact"]['id']) ? $data["contact"]['id'] : null,
-                'locationId' => isset($data["contact"]['locationId']) ? $data["contact"]['locationId'] : null,
-                'contactName' => isset($data["contact"]['contactName']) ? $data["contact"]['contactName'] : null,
-                'firstName' => isset($data["contact"]['firstName']) ? $data["contact"]['firstName'] : null,
-                'lastName' => isset($data["contact"]['lastName']) ? $data["contact"]['lastName'] : null,
-                'companyName' => isset($data["contact"]['companyName']) ? $data["contact"]['companyName'] : null,
-                'email' => isset($data["contact"]['email']) ? $data["contact"]['email'] : null,
-                'phone' => isset($data["contact"]['phone']) ? $data["contact"]['phone'] : null,
-                'dnd' => isset($data["contact"]['dnd']) ? $data["contact"]['dnd'] : null,
-                'type' => isset($data["contact"]['type']) ? $data["contact"]['type'] : null,
-                'source' => isset($data["contact"]['source']) ? $data["contact"]['source'] : null,
-                'assignedTo' => isset($data["contact"]['assignedTo']) ? $data["contact"]['assignedTo'] : null,
-                'city' => isset($data["contact"]['city']) ? $data["contact"]['city'] : null,
-                'state' => isset($data["contact"]['state']) ? $data["contact"]['state'] : null,
-                'postalCode' => isset($data["contact"]['postalCode']) ? $data["contact"]['postalCode'] : null,
-                'address1' => isset($data["contact"]['address1']) ? $data["contact"]['address1'] : null,
-                'dateAdded' => isset($data["contact"]['dateAdded']) ? new DateTime($data["contact"]['dateAdded']) : null,
-                'dateUpdated' => isset($data["contact"]['dateUpdated']) ? new DateTime($data["contact"]['dateUpdated']) : null,
-                'dateOfBirth' => isset($data["contact"]['dateUpdated']) ? new DateTime($data["contact"]['dateUpdated']) : null,
-                'lastActivity' => isset($data["contact"]['lastActivity']) ? $data["contact"]['lastActivity'] : null,
-            ]);
+            if ($data["contact"]) {
+                DB::beginTransaction();
+                $newContact = Contact::create([
+                    'contactid' => isset($data["contact"]['id']) ? $data["contact"]['id'] : null,
+                    'locationId' => isset($data["contact"]['locationId']) ? $data["contact"]['locationId'] : null,
+                    'contactName' => isset($data["contact"]['contactName']) ? $data["contact"]['contactName'] : null,
+                    'firstName' => isset($data["contact"]['firstName']) ? $data["contact"]['firstName'] : null,
+                    'lastName' => isset($data["contact"]['lastName']) ? $data["contact"]['lastName'] : null,
+                    'companyName' => isset($data["contact"]['companyName']) ? $data["contact"]['companyName'] : null,
+                    'email' => isset($data["contact"]['email']) ? $data["contact"]['email'] : null,
+                    'phone' => isset($data["contact"]['phone']) ? $data["contact"]['phone'] : null,
+                    'dnd' => isset($data["contact"]['dnd']) ? $data["contact"]['dnd'] : null,
+                    'type' => isset($data["contact"]['type']) ? $data["contact"]['type'] : null,
+                    'source' => isset($data["contact"]['source']) ? $data["contact"]['source'] : null,
+                    'assignedTo' => isset($data["contact"]['assignedTo']) ? $data["contact"]['assignedTo'] : null,
+                    'city' => isset($data["contact"]['city']) ? $data["contact"]['city'] : null,
+                    'state' => isset($data["contact"]['state']) ? $data["contact"]['state'] : null,
+                    'postalCode' => isset($data["contact"]['postalCode']) ? $data["contact"]['postalCode'] : null,
+                    'address1' => isset($data["contact"]['address1']) ? $data["contact"]['address1'] : null,
+                    'dateAdded' => isset($data["contact"]['dateAdded']) ? new DateTime($data["contact"]['dateAdded']) : null,
+                    'dateUpdated' => isset($data["contact"]['dateUpdated']) ? new DateTime($data["contact"]['dateUpdated']) : null,
+                    'dateOfBirth' => isset($data["contact"]['dateUpdated']) ? new DateTime($data["contact"]['dateUpdated']) : null,
+                    'lastActivity' => isset($data["contact"]['lastActivity']) ? $data["contact"]['lastActivity'] : null,
+                ]);
 
-            if (isset($data["contact"]['tags'])) {
-                foreach ($data["contact"]['tags'] as $tag) {
-                    ContactTag::create([
-                        'value' => $tag,
-                        'contact_id' => $newContact->id
-                    ]);
+                if (isset($data["contact"]['tags'])) {
+                    foreach ($data["contact"]['tags'] as $tag) {
+                        ContactTag::create([
+                            'value' => $tag,
+                            'contact_id' => $newContact->id
+                        ]);
+                    }
                 }
-            }
-            if (is_array($data["contact"]['customField'])) {
-                foreach ($data["contact"]['customField'] as $customField) {
-                    ContactCustomField::create([
-                        'customFieldId' => $customField['id'],
-                        'value' => $customField['value'],
-                        'contact_id' => $newContact->id
-                    ]);
+                $con = $newContact;
+                if (is_array($data["contact"]['customField'])) {
+                    foreach ($data["contact"]['customField'] as $customField) {
+                        ContactCustomField::create([
+                            'customFieldId' => $customField['id'],
+                            'value' => $customField['value'],
+                            'contact_id' => $newContact->id
+                        ]);
+                    }
                 }
+
+                DB::commit();
+
+                return $newContact;
             }
-
-            DB::commit();
-
-            return $newContact;
+        } catch (\Throwable $th) {
+            return $con;
         }
 
         return null;
