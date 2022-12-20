@@ -300,7 +300,10 @@ class AppointmentController extends Controller
             }
             if (is_array($data["contact"]['customField'])) {
                 foreach ($data["contact"]['customField'] as $customField) {
-                    dd($newContact->id);
+                    if ($newContact->id <> 2909) {
+                        # code...
+                        dd($newContact->id);
+                    }
 
                     ContactCustomField::create([
                         'customFieldId' => $customField['id'],
