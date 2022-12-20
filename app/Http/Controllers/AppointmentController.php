@@ -316,8 +316,8 @@ class AppointmentController extends Controller
                 return $newContact;
             }
         } catch (\Throwable $th) {
-            $con = 'error: ' . $con;
-            dd($con);
+            // $con = 'error: ' . $con;
+            var_dump($con);
         }
 
         return null;
