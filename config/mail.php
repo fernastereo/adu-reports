@@ -115,4 +115,5 @@ return [
         ],
     ],
 
+    'send_reports_to' => env('SEND_REPORTS_TO', 'hello@example.com'),
 ];
