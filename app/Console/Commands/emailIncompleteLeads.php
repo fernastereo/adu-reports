@@ -82,7 +82,6 @@ class emailIncompleteLeads extends Command
                     $data = [
                         'from' => config('mail.from.name') . '<' . config('mail.from.address') . '>',
                         'to' => $person->email,
-                        'cc' => config('mail.send_reports_to'),
                         'subject' => $person->name . ' :Leads without Disposition and Feedback',
                         'html' => $preparedData['result']
                     ];
@@ -118,29 +117,50 @@ class emailIncompleteLeads extends Command
     public function prepareData($data, $all, $person = null)
     {
         $result = $all
-            ? "<html><h3>[GENERAL REPORT] Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3><table class='blueTable'><thead><tr>"
-            : "<html><h3>{$person->name}: Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3><table class='blueTable'><thead><tr>";
+            ? "<html><h3>[GENERAL REPORT] Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>"
+            : "<html><h3>{$person->name}: Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>";
 
-        $result .= "<th>Date</th>
-                        <th>Customer Name</th>
-                        <th>Sales Person</th>
-                        <th>Call Meeting</th>
-                        <th>On Site</th>
-                    </tr></thead><tbody>";
+        $result .= "<table style='border: 1px solid #919BA4; background-color: #EEEEEE; width: 100%; text-align: left; border-collapse: collapse;'>
+                        <thead style='background: #969C9E; border-bottom: 2px solid #444444;'>
+                            <tr>
+                                <th style=' width: 80px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Date</th>
+                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Customer Name</th>
+                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Sales Person</th>
+                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Call Meeting</th>
+                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>On Site</th>
+                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Disposition</th>
+                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Sales Person Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
         $dataToSend = false;
         foreach ($data["data"] as $lead) {
             if ($all) {
                 if ($lead["disposition"] === '' || $lead["salesPersonFeedback"] === '') {
-                    $result .= "<tr><td>" . date("Y-m-d", strtotime($lead['date'])) . "</td><td>" . $lead['customerName'] . "</td><td>" . $lead['salesPerson'] . "</td>
-                        <td>" . $lead['callMeeting'] . "</td><td>" . $lead['onSite'] . "</td></tr>";
+                    $result .= "<tr>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($lead['date'])) . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['customerName'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPerson'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['callMeeting'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['onSite'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['disposition'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPersonFeedback'] . "</td>
+                    </tr>";
 
                     $dataToSend = true;
                 }
             } else {
                 if ($person->assignedUserId === $lead["assignedUserId"] && ($lead["disposition"] === '' || $lead["salesPersonFeedback"] === '')) {
-                    $result .= "<tr><td>" . date("Y-m-d", strtotime($lead['date'])) . "</td><td>" . $lead['customerName'] . "</td><td>" . $lead['salesPerson'] . "</td>
-                        <td>" . $lead['callMeeting'] . "</td><td>" . $lead['onSite'] . "</td></tr>";
+                    $result .= "<tr>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($lead['date'])) . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['customerName'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPerson'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['callMeeting'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['onSite'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['disposition'] . "</td>
+                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPersonFeedback'] . "</td>
+                    </tr>";
 
                     $dataToSend = true;
                 }
