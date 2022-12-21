@@ -116,52 +116,36 @@ class emailIncompleteLeads extends Command
 
     public function prepareData($data, $all, $person = null)
     {
-        $result = $all
-            ? "<html><h3>[GENERAL REPORT] Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>"
-            : "<html><h3>{$person->name}: Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>";
+        $result = "<html>";
+        $result .= $all
+            ? "<h3>[GENERAL REPORT] Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>"
+            : "<h3>{$person->name}: Leads without disposition or sales feedback set from {$data['params']['startDate']} to {$data['params']['endDate']}</h3>";
 
-        $result .= "<table style='border: 1px solid #919BA4; background-color: #EEEEEE; width: 100%; text-align: left; border-collapse: collapse;'>
-                        <thead style='background: #969C9E; border-bottom: 2px solid #444444;'>
+        $result .= "<table style='border: 1px solid #b53c00; background-color: #EEEEEE; width: 100%; text-align: left; border-collapse: collapse;'>
+                        <thead style='background: #1775c9; border-bottom: 2px solid #ffffff;'>
                             <tr>
-                                <th style=' width: 80px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Date</th>
-                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Customer Name</th>
-                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Sales Person</th>
-                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Call Meeting</th>
-                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>On Site</th>
-                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Disposition</th>
-                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #0A0A0A; border-left: 2px solid #444444;'>Sales Person Feedback</th>
+                                <th style=' width: 80px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Date</th>
+                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Customer Name</th>
+                                <th style=' width: 150px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Sales Person</th>
+                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Call Meeting</th>
+                                <th style=' width: 90px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>On Site</th>
+                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Disposition</th>
+                                <th style=' width: 250px; border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px; font-weight: bold; color: #ffffff; border-left: 2px solid #444444; text-align: center;'>Sales Person Feedback</th>
                             </tr>
                         </thead>
-                        <tbody>";
+                        <tbody style='background-color: #ffffff; color: #000000;'>";
 
         $dataToSend = false;
+
         foreach ($data["data"] as $lead) {
             if ($all) {
                 if ($lead["disposition"] === '' || $lead["salesPersonFeedback"] === '') {
-                    $result .= "<tr>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($lead['date'])) . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['customerName'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPerson'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['callMeeting'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['onSite'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['disposition'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPersonFeedback'] . "</td>
-                    </tr>";
-
+                    $result .= $this->getRow($lead);
                     $dataToSend = true;
                 }
             } else {
                 if ($person->assignedUserId === $lead["assignedUserId"] && ($lead["disposition"] === '' || $lead["salesPersonFeedback"] === '')) {
-                    $result .= "<tr>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($lead['date'])) . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['customerName'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPerson'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['callMeeting'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['onSite'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['disposition'] . "</td>
-                        <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $lead['salesPersonFeedback'] . "</td>
-                    </tr>";
-
+                    $result .= $this->getRow($lead);
                     $dataToSend = true;
                 }
             }
@@ -169,5 +153,32 @@ class emailIncompleteLeads extends Command
         $result .= "</tbody></table></html>";
 
         return ['dataToSend' => $dataToSend, 'result' => $result];
+    }
+
+    function codeColor($record)
+    {
+        return ($record === 'showed'
+            ? 'background-color: #bbf7d0; color: #40a061;'
+            : ($record === 'confirmed'
+                ? 'background-color: #bfdbfe; color: #5175f0;'
+                : ($record === 'cancelled'
+                    ? 'background-color: #fecaca; color: #dd4746;'
+                    : '')));
+    }
+
+    function getRow($record)
+    {
+        $callMeetingColor = $this->codeColor($record['callMeeting']);
+        $onSiteColor = $this->codeColor($record['onSite']);
+
+        return "<tr>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($record['date'])) . "</td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['customerName'] . "</td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['salesPerson'] . "</td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $callMeetingColor padding: 5px; text-align: center;'>" . $record['callMeeting'] . "</p></td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $onSiteColor padding: 5px; text-align: center;'>" . $record['onSite'] . "</p></td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['disposition'] . "</td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['salesPersonFeedback'] . "</td>
+                </tr>";
     }
 }
