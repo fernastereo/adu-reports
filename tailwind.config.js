@@ -16,6 +16,7 @@ module.exports = {
             },
             colors: {
                 'adu-blue': '#1775c9',
+                'adu-blue-50': '#e1eeff',
                 'adu-red': '#b53c00'
             },
         },

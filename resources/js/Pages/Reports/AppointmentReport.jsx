@@ -50,7 +50,7 @@ export default function AppointmentReport(props) {
 						const callMeetingColor = item.callMeeting === 'showed' ? 'text-green-600 bg-green-200' : item.callMeeting === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.callMeeting === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						const onSiteColor = item.onSite === 'showed' ? 'text-green-600 bg-green-200' : item.onSite === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.onSite === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						return(
-							<tr key={i} className="bg-white border-b border-adu-red hover:bg-gray-50">
+							<tr key={i} className="bg-white border-b border-adu-red hover:bg-adu-blue-50">
 								<td className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</td>
 								<td className="py-4 px-6 text-xs">{item.customerName}</td>
 								<td className="py-4 px-6 text-xs">{item.salesPerson}</td>
