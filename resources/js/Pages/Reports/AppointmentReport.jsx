@@ -50,7 +50,7 @@ export default function AppointmentReport(props) {
 						const callMeetingColor = item.callMeeting === 'showed' ? 'text-green-600 bg-green-200' : item.callMeeting === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.callMeeting === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						const onSiteColor = item.onSite === 'showed' ? 'text-green-600 bg-green-200' : item.onSite === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.onSite === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						return(
-							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
+							<tr key={i} className="bg-white border-b border-adu-red dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
 								<td className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</td>
 								<td className="py-4 px-6 text-xs">{item.customerName}</td>
 								<td className="py-4 px-6 text-xs">{item.salesPerson}</td>
@@ -170,10 +170,10 @@ export default function AppointmentReport(props) {
 									</div>
 								</div>							
 								<div className="col-span-6 sm:col-span-3 flex items-center mx-6">
-									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
+									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-adu-blue text-white mx-4" type="submit">
 										Load Data
 									</button>
-									<button onClick={onExport} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
+									<button onClick={onExport} className="h-10 px-6 font-semibold rounded-md bg-adu-blue text-white mx-4" type="submit">
 										Export
 									</button>
 								</div>
@@ -192,18 +192,18 @@ export default function AppointmentReport(props) {
 						{!processing && 
 						<div className="overflow-x-auto">
 						<table className="table-fixed">
-							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
+							<thead className="text-xs bg-adu-blue">
 								<tr>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Date</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Customer Name</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Call Meeting</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">On Site</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Contract Sent</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Opportunity Won</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Appointment Setter Notes</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Disposition</th>
-									<th className="text-sm font-medium text-gray-900 px-6 py-2">Sales Person Feedback</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Date</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Customer Name</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Sales Person</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Call Meeting</th>
+									<th className="text-sm font-medium text-white px-6 py-2">On Site</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Contract Sent</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Opportunity Won</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Appointment Setter Notes</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Disposition</th>
+									<th className="text-sm font-medium text-white px-6 py-2">Sales Person Feedback</th>
 								</tr>
 							</thead>
 							<tbody>

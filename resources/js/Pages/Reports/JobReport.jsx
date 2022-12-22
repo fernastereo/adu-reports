@@ -9,10 +9,21 @@ import Swal from 'sweetalert2';
 export default function JobReport(props) {
 	const [processing, setProcessing] = useState(false);
 	const [error, setError] = useState('');
-	const [startDate, setStartDate] = useState('');
-	const [endDate, setEndDate] = useState('');
 	const [rowData, setRowData] = useState([]);
 	const [exportData, setExportData] = useState([]);
+	
+	const getEndDate = () => {
+		const currDate = new Date();
+		return currDate.toISOString().substring(0, 10);
+	}
+	const getStartDate = () => {
+		const sDate = new Date(endDate);
+		sDate.setDate(sDate.getDate() - 2);
+		return sDate.toISOString().substring(0, 10);
+	}
+
+	const [endDate, setEndDate] = useState(getEndDate());
+	const [startDate, setStartDate] = useState(getStartDate());
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -35,11 +46,13 @@ export default function JobReport(props) {
 			.then(response => {
 				if(response.success){
 					const displayData = response.data.map((item, i) => {
+						const resultColor = item.jobresult === 'SUCCESS' ? 'text-green-600 bg-green-200' : 'text-red-600 bg-red-200';
 						return(
-							<tr key={i} className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
-								<th scope="row" className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.created_at).toLocaleString("en-US")}</th>
-								<th scope="col" className="py-4 px-6 text-xs">{item.jobname}</th>
-								<th scope="col" className={`py-4 px-6 text-xs ${item.jobresult === 'SUCCESS' ? 'text-green-600' : 'text-red-600'}`}>{item.jobresult}</th>
+							<tr key={i} className="bg-white border-b border-adu-red dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400">
+								<td scope="row" className="py-4 px-6 text-sm text-gray-900 whitespace-pre-wrap">{new Date(item.created_at).toLocaleString("en-US")}</td>
+								<td scope="col" className="py-4 px-6 text-sm">{item.jobname}</td>
+								<td><p className={`py-2 px-2 text-sm text-center uppercase rounded-full ${resultColor}`}>{item.jobresult}</p></td>
+								{/* <td scope="col" className={`py-4 px-6 text-sm ${item.jobresult === 'SUCCESS' ? 'text-green-600' : 'text-red-600'}`}>{item.jobresult}</td> */}
 							</tr>)
 					});
 					setExportData(response.data);
@@ -149,7 +162,7 @@ export default function JobReport(props) {
 									</div>
 								</div>							
 								<div className="col-span-6 sm:col-span-3 flex items-center mx-6">
-									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-black text-white mx-4" type="submit">
+									<button onClick={onSubmit} className="h-10 px-6 font-semibold rounded-md bg-adu-blue text-white mx-4" type="submit">
 										Search
 									</button>
 								</div>
@@ -164,15 +177,15 @@ export default function JobReport(props) {
 					{processing && <div className="flex items-center justify-center mt-8">
 						<Spinner/>
 					</div>}
-					<div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+					<div className="bg-white bg-adu-blue">
 						{!processing && 
 						<div className="overflow-x-auto">
 						<table className="min-w-full">
-							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
+							<thead className="text-xs bg-adu-blue">
 								<tr>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Date</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Job</th>
-									<th scope="col" className="text-sm font-medium text-gray-900 px-6 py-2">Status</th>
+									<th scope="col" className="text-sm font-medium text-white px-6 py-2">Date</th>
+									<th scope="col" className="text-sm font-medium text-white px-6 py-2">Job</th>
+									<th scope="col" className="text-sm font-medium text-white px-6 py-2">Status</th>
 								</tr>
 							</thead>
 							<tbody>
