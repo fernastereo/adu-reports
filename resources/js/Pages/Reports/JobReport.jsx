@@ -179,7 +179,7 @@ export default function JobReport(props) {
 					</div>}
 					<div className="bg-white bg-adu-blue">
 						{!processing && 
-						<div className="overflow-x-auto">
+						<div className="overflow-x-auto bg-adu-blue">
 						<table className="min-w-full">
 							<thead className="text-xs bg-adu-blue">
 								<tr>

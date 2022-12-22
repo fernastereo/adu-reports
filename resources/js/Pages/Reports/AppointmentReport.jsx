@@ -190,7 +190,7 @@ export default function AppointmentReport(props) {
 					</div>}
 					<div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 						{!processing && 
-						<div className="overflow-x-auto">
+						<div className="overflow-x-auto bg-adu-blue">
 						<table className="table-fixed">
 							<thead className="text-xs bg-adu-blue">
 								<tr>
