@@ -52,7 +52,6 @@ export default function JobReport(props) {
 								<td scope="row" className="py-4 px-6 text-sm text-gray-900 whitespace-pre-wrap">{new Date(item.created_at).toLocaleString("en-US")}</td>
 								<td scope="col" className="py-4 px-6 text-sm">{item.jobname}</td>
 								<td><p className={`py-2 px-2 text-sm text-center uppercase rounded-full ${resultColor}`}>{item.jobresult}</p></td>
-								{/* <td scope="col" className={`py-4 px-6 text-sm ${item.jobresult === 'SUCCESS' ? 'text-green-600' : 'text-red-600'}`}>{item.jobresult}</td> */}
 							</tr>)
 					});
 					setExportData(response.data);

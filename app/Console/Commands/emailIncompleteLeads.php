@@ -175,8 +175,8 @@ class emailIncompleteLeads extends Command
                     <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . date("Y-m-d", strtotime($record['date'])) . "</td>
                     <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['customerName'] . "</td>
                     <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['salesPerson'] . "</td>
-                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $callMeetingColor padding: 5px; text-align: center;'>" . $record['callMeeting'] . "</p></td>
-                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $onSiteColor padding: 5px; text-align: center;'>" . $record['onSite'] . "</p></td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $callMeetingColor padding: 5px; text-align: center;'>" . strtoupper($record['callMeeting']) . "</p></td>
+                    <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'><p style='border-radius: 20px; $onSiteColor padding: 5px; text-align: center;'>" . strtoupper($record['onSite']) . "</p></td>
                     <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['disposition'] . "</td>
                     <td style='border: 1px solid #AAAAAA; padding: 3px 2px; font-size: 12px;'>" . $record['salesPersonFeedback'] . "</td>
                 </tr>";
