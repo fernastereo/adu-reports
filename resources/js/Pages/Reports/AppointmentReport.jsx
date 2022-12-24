@@ -51,16 +51,16 @@ export default function AppointmentReport(props) {
 						const onSiteColor = item.onSite === 'showed' ? 'text-green-600 bg-green-200' : item.onSite === 'confirmed' ? 'text-blue-600 bg-blue-200' : item.onSite === 'cancelled' ? 'text-red-600 bg-red-200' : '';
 						return(
 							<tr key={i} className="bg-white border-b border-adu-red hover:bg-adu-blue-50">
-								<td className="py-4 px-6 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</td>
-								<td className="py-4 px-6 text-xs">{item.customerName}</td>
-								<td className="py-4 px-6 text-xs">{item.salesPerson}</td>
+								<td className="py-4 px-2 text-xs text-gray-900 whitespace-pre-wrap">{new Date(item.date).toLocaleDateString("en-US")}</td>
+								<td className="py-4 px-2 text-xs">{item.customerName}</td>
+								<td className="py-4 px-2 text-xs">{item.salesPerson}</td>
 								<td><p className={`py-2 px-2 text-xs text-center uppercase rounded-full ${callMeetingColor}`}>{item.callMeeting}</p></td>
 								<td><p className={`py-2 px-2 text-xs text-center uppercase rounded-full ${onSiteColor}`}>{item.onSite}</p></td>
-								<td className="py-4 px-6 text-xs">{item.contractSent}</td>
-								<td className="py-4 px-6 text-xs">{item.opportunityWon}</td>
-								<td className="py-4 px-6 text-xs">{item.appointmentSetterNotes}</td>
-								<td className="py-4 px-6 text-xs">{item.disposition}</td>
-								<td className="py-4 px-6 text-xs">{item.salesPersonFeedback}</td>
+								<td className="py-4 px-6 text-xs text-center font-extrabold">{item.contractSent}</td>
+								<td className="py-4 px-6 text-xs text-center font-extrabold">{item.opportunityWon}</td>
+								<td className="py-4 px-1 text-xs">{item.appointmentSetterNotes}</td>
+								<td className="py-4 px-1 text-xs">{item.disposition}</td>
+								<td className="py-4 px-1 text-xs">{item.salesPersonFeedback}</td>
 							</tr>)
 					});
 					setExportData(response.data);
@@ -191,19 +191,19 @@ export default function AppointmentReport(props) {
 					<div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 						{!processing && 
 						<div className="overflow-x-auto bg-adu-blue">
-						<table className="table-fixed">
+						<table className="table-fixed" style={{width: '100%'}}>
 							<thead className="text-xs bg-adu-blue">
 								<tr>
-									<th className="text-sm font-medium text-white px-6 py-2">Date</th>
+									<th className="text-sm font-medium text-white px-2 py-2" style={{width: '7%'}}>Date</th>
 									<th className="text-sm font-medium text-white px-6 py-2">Customer Name</th>
 									<th className="text-sm font-medium text-white px-6 py-2">Sales Person</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Call Meeting</th>
-									<th className="text-sm font-medium text-white px-6 py-2">On Site</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Contract Sent</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Opportunity Won</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Appointment Setter Notes</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Disposition</th>
-									<th className="text-sm font-medium text-white px-6 py-2">Sales Person Feedback</th>
+									<th className="text-sm font-medium text-white px-1 py-2" style={{width: '8%'}}>Call Meeting</th>
+									<th className="text-sm font-medium text-white px-1 py-2" style={{width: '8%'}}>On Site</th>
+									<th className="text-sm font-medium text-white px-1 py-2" style={{width: '7%'}}>Contract Sent</th>
+									<th className="text-sm font-medium text-white px-1 py-2" style={{width: '7%'}}>Opportunity Won</th>
+									<th className="text-sm font-medium text-white px-6 py-2" style={{width: '15%'}}>Appointment Setter Notes</th>
+									<th className="text-sm font-medium text-white px-6 py-2" style={{width: '10%'}}>Disposition</th>
+									<th className="text-sm font-medium text-white px-6 py-2" style={{width: '15%'}}>Sales Person Feedback</th>
 								</tr>
 							</thead>
 							<tbody>
